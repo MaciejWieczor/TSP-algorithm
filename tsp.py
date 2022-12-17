@@ -5,7 +5,10 @@ import sys
 
 # takes name of tsp file from the first command line argument
 class travelling_salesman_problem_algorithm:
-    def __init__(self):
+    def __init__(self, population_size=5):
+        # set population size
+        self.population_size = population_size
+
         # load the tsplib problem
         self.problem = tsplib95.load('./' + sys.argv[1])
 
@@ -17,6 +20,14 @@ class travelling_salesman_problem_algorithm:
 
         # get chromosome length
         self.chromosome_length = self.distance_matrix[0].shape[1]
+
+        # initialize population
+        self.population = []
+        for i in range(self.population_size):
+            self.population.append(self.initialize_random_chromosome())
+
+        # initialize evaluation value for each population member to max
+        self.population_evaluation = [sys.maxsize] * self.population_size
 
     def initialize_random_chromosome(self):
         # randomize array of cities indexes
@@ -34,9 +45,19 @@ class travelling_salesman_problem_algorithm:
             sum += self.return_distance_matrix(chromosome_array[i], chromosome_array[i + 1])
         return sum
 
+    def evaluate_chromosomes(self):
+        for i in range(self.population_size):
+            self.population_evaluation[i] = self.evaluate_chromosome(self.population[i])
+            
+
 # testing
-TSP_instance = travelling_salesman_problem_algorithm()
-for i in range(0, 10): 
-    chromosome_1 = TSP_instance.initialize_random_chromosome()
-    print(f"Chromosome nr {i} score : {TSP_instance.evaluate_chromosome(chromosome_1)}")
-    print(chromosome_1)
+# create class instance
+TSP_instance = travelling_salesman_problem_algorithm(population_size=10)
+# evaluate first population iteration
+TSP_instance.evaluate_chromosomes()
+# loop over each member of the population
+for i in range(TSP_instance.population_size): 
+    # print each member score
+    print(f"Chromosome nr {i} score : {TSP_instance.population_evaluation[i]}")
+    # print each member city visit order
+    print(TSP_instance.population[i])
