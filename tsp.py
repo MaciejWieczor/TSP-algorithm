@@ -1,3 +1,4 @@
+from numpy.random import randint
 import tsplib95
 import networkx
 import sys
@@ -13,6 +14,13 @@ class travelling_salesman_problem_algorithm:
 
         # convert into a numpy distance matrix
         self.distance_matrix = networkx.to_numpy_matrix(self.graph)
+
+        # get chromosome length
+        self.chromosome_length = self.distance_matrix[0].len()
+
+    def initialize_random_chromosome(self):
+        # randomize array of cities indexes
+        return(randint(0, self.chromosome_length, self.chromosome_length))
 
     def return_distance_matrix(self, x, y):
         # print the distance between nodes 4 and 2:
