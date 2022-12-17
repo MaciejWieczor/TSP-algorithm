@@ -20,7 +20,9 @@ class travelling_salesman_problem_algorithm:
 
     def initialize_random_chromosome(self):
         # randomize array of cities indexes
-        return(randint(0, self.chromosome_length, self.chromosome_length))
+        array = randint(1, self.chromosome_length, self.chromosome_length-1)
+        array[0] = 0
+        return(array)
 
     def return_distance_matrix(self, x, y):
         # print the distance between nodes 4 and 2:
@@ -37,3 +39,4 @@ TSP_instance = travelling_salesman_problem_algorithm()
 for i in range(0, 10): 
     chromosome_1 = TSP_instance.initialize_random_chromosome()
     print(f"Chromosome nr {i} score : {TSP_instance.evaluate_chromosome(chromosome_1)}")
+    print(chromosome_1)
