@@ -48,16 +48,28 @@ class travelling_salesman_problem_algorithm:
     def evaluate_chromosomes(self):
         for i in range(self.population_size):
             self.population_evaluation[i] = self.evaluate_chromosome(self.population[i])
+
+    def sort_by_evaluation(self):
+        self.population = [x for _, x in sorted(zip(self.population_evaluation,\
+                                                    self.population))]
+        self.population_evaluation.sort()
+
             
 
 # testing
 # create class instance
 TSP_instance = travelling_salesman_problem_algorithm(population_size=10)
+
 # evaluate first population iteration
 TSP_instance.evaluate_chromosomes()
+
+# sort population by evaluation
+TSP_instance.sort_by_evaluation()
+
 # loop over each member of the population
 for i in range(TSP_instance.population_size): 
     # print each member score
     print(f"Chromosome nr {i} score : {TSP_instance.population_evaluation[i]}")
+
     # print each member city visit order
     print(TSP_instance.population[i])
