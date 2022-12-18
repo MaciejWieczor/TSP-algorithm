@@ -1,4 +1,6 @@
 from numpy.random import randint
+import numpy as np
+import matplotlib.pyplot as plt
 import tsplib95
 import networkx
 import sys
@@ -15,6 +17,9 @@ class travelling_salesman_problem_algorithm:
         # convert into a networkx.Graph
         self.graph = self.problem.get_graph()
 
+        # get nodes into a list for easier plotting
+        self.node_list = list(self.graph.nodes(data='coord'))
+
         # convert into a numpy distance matrix
         self.distance_matrix = networkx.to_numpy_matrix(self.graph)
 
@@ -29,10 +34,17 @@ class travelling_salesman_problem_algorithm:
         # initialize evaluation value for each population member to max
         self.population_evaluation = [sys.maxsize] * self.population_size
 
+        # visual part 
+        self.fig, self.ax = plt.subplots()
+
+
     def initialize_random_chromosome(self):
         # randomize array of cities indexes
-        array = randint(1, self.chromosome_length, self.chromosome_length-1)
-        array[0] = 0
+        # array = randint(1, self.chromosome_length, self.chromosome_length-1)
+        array = np.random.choice(range(1, self.chromosome_length),\
+                                 self.chromosome_length-1, replace=False)
+        array = np.insert(array, 0, 0)
+        print(array)
         return(array)
 
     def return_distance_matrix(self, x, y):
@@ -54,7 +66,24 @@ class travelling_salesman_problem_algorithm:
                                                     self.population))]
         self.population_evaluation.sort()
 
-            
+    def visualize_connections(self):
+        # first translate points into two arrays
+        x_point = []
+        y_point = []
+        for i in range(self.chromosome_length):
+            x_point.append(self.node_list[i][1][0])
+            y_point.append(self.node_list[i][1][1])
+        # second get connections
+        x_connection = []
+        y_connection = []
+        print(self.node_list[self.population[0][0]])
+        print(list(self.population[0]))
+        for i in range(self.chromosome_length):
+            x_connection.append(self.node_list[self.population[0][i]][1][0])
+            y_connection.append(self.node_list[self.population[0][i]][1][1])
+        self.ax.scatter(x_point,y_point)
+        self.ax.plot(x_connection,y_connection)
+        plt.show()
 
 # testing
 # create class instance
@@ -73,3 +102,5 @@ for i in range(TSP_instance.population_size):
 
     # print each member city visit order
     print(TSP_instance.population[i])
+
+TSP_instance.visualize_connections()
