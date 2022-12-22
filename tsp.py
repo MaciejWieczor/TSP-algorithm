@@ -6,7 +6,7 @@ import tsplib95
 import networkx
 import sys
 
-number_of_iterations = 3000
+number_of_iterations = 20000
 
 # takes name of tsp file from the first command line argument
 class travelling_salesman_problem_algorithm:
@@ -40,6 +40,9 @@ class travelling_salesman_problem_algorithm:
         # visual part 
         self.fig, self.ax = plt.subplots()
 
+        # best chromosome
+        self.best_chromosome = None
+        self.best_score = None
 
     def initialize_random_chromosome(self):
         # randomize array of cities indexes
@@ -65,12 +68,8 @@ class travelling_salesman_problem_algorithm:
         for i in range(self.population_size):
             self.population_evaluation[i] = self.evaluate_chromosome(self.population[i])
 
-    def crossing_function(self, i):
+    def crossing_function(self, i, second_parent_index):
         # implement OX crossover here
-        # find second parent
-        second_parent_index = randint(0, self.population_size)
-        while second_parent_index == i:
-            second_parent_index = randint(0, self.population_size)
 
         # create children
         first_crossover_point = randint(1, self.chromosome_length/2)
@@ -153,14 +152,37 @@ class travelling_salesman_problem_algorithm:
             self.population_evaluation[second_parent_index] = child_two_evaluation
             if(return_value == 3):
                 return_value = 2
-            else:
-                return_value = 0
 
         # print("------------------------------------------------------------------------")
         return return_value
 
     def mutating_function(self, i):
-        pass
+
+        test = randint(0, 1000)
+        if test < 10:
+
+            # swap two elements of the "i" chromosome
+            first_mutation_index = randint(11, self.chromosome_length-10)
+            second_mutation_index = randint(first_mutation_index-10, first_mutation_index+10)
+            while first_mutation_index == second_mutation_index:
+                second_mutation_index = randint(first_mutation_index-10, first_mutation_index+10)
+
+            new_mutated_chromosome = self.population[i]
+
+            # do the swap
+            tmp = new_mutated_chromosome[second_mutation_index]
+
+            new_mutated_chromosome[second_mutation_index] = \
+                new_mutated_chromosome[first_mutation_index]
+
+            new_mutated_chromosome[first_mutation_index] = tmp
+
+
+            # test evaluation 
+            mutated_evaluation = self.evaluate_chromosome(new_mutated_chromosome)
+            # if mutated_evaluation < self.population_evaluation[i]:
+            self.population[i] = new_mutated_chromosome 
+            self.population_evaluation[i] = mutated_evaluation
 
     def update_population(self):
         # loop through all chromosomes 
@@ -174,9 +196,15 @@ class travelling_salesman_problem_algorithm:
             # if test passed then do crossing and check agains last evaluation 
             # if better than last evaluation update member - else go to mutations
             if(probability_test < probability_treshold):
-                do_mutation = self.crossing_function(i)
+
+                # find second parent
+                second_parent_index = randint(0, self.population_size)
+                while second_parent_index == i:
+                    second_parent_index = randint(0, self.population_size)
+
+                do_mutation = self.crossing_function(i, second_parent_index)
                 # mutate member if he didn't do crossing
-                if(do_mutation):
+                if do_mutation == 3:
                     self.mutating_function(i)
 
     def visualize_connections(self):
@@ -189,9 +217,10 @@ class travelling_salesman_problem_algorithm:
         # second get connections
         x_connection = []
         y_connection = []
+        min_index = np.argmin(self.population_evaluation)
         for i in range(self.chromosome_length):
-            x_connection.append(self.node_list[self.population[0][i]][1][0])
-            y_connection.append(self.node_list[self.population[0][i]][1][1])
+            x_connection.append(self.node_list[self.best_chromosome[i]][1][0])
+            y_connection.append(self.node_list[self.best_chromosome[i]][1][1])
         self.ax.scatter(x_point,y_point)
         self.ax.plot(x_connection,y_connection)
         plt.show()
@@ -199,15 +228,21 @@ class travelling_salesman_problem_algorithm:
 # testing
 # create class instance
 TSP_instance = travelling_salesman_problem_algorithm(population_size=5)
+TSP_instance.best_chromosome = TSP_instance.population[np.argmin(min(TSP_instance.population_evaluation))]
+TSP_instance.best_score = min(TSP_instance.population_evaluation)
 
 for k in range(number_of_iterations):
-    print(f"ITERATION {k}")
     # get chromosome scores
     TSP_instance.evaluate_chromosomes()
 
     # get new population based on probability
     TSP_instance.update_population()
 
-    print(max(TSP_instance.population_evaluation))
+    if(k % 1000 == 0):
+        print(f"ITERATION {k}")
+        print(min(TSP_instance.population_evaluation))
+    if(min(TSP_instance.population_evaluation) < TSP_instance.best_score):
+        TSP_instance.best_chromosome = TSP_instance.population[np.argmin(min(TSP_instance.population_evaluation))]
+        TSP_instance.best_score = min(TSP_instance.population_evaluation)
 
 TSP_instance.visualize_connections()
