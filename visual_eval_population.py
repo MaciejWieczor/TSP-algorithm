@@ -13,8 +13,8 @@ y20 = np.loadtxt("results_eval/xqf131_50k_20p_679_y.txt").astype(int)
 
 plt.plot(x20, y20, label = "20 chromosomes")
 
-x50 = np.loadtxt("results_eval/xqf131_50k_50p_649_x.txt").astype(int)
-y50 = np.loadtxt("results_eval/xqf131_50k_50p_649_y.txt").astype(int)
+x50 = np.loadtxt("results_eval/xqf131_50k_50p_655_x.txt").astype(int)
+y50 = np.loadtxt("results_eval/xqf131_50k_50p_655_y.txt").astype(int)
 
 plt.plot(x50, y50, label = "50 chromosomes")
   
