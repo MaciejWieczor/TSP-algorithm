@@ -72,8 +72,8 @@ class travelling_salesman_problem_algorithm:
         # implement OX crossover here
 
         # create children
-        first_crossover_point = randint(1, self.chromosome_length/2)
-        second_crossover_point = randint(self.chromosome_length/2, self.chromosome_length)
+        first_crossover_point = randint(1, self.chromosome_length-2)
+        second_crossover_point = randint(first_crossover_point + 1, self.chromosome_length)
 
         new_child_one = [0] * self.chromosome_length
         new_child_two = [0] * self.chromosome_length
@@ -162,10 +162,10 @@ class travelling_salesman_problem_algorithm:
         if test < 10:
 
             # swap two elements of the "i" chromosome
-            first_mutation_index = randint(11, self.chromosome_length-10)
-            second_mutation_index = randint(first_mutation_index-10, first_mutation_index+10)
+            first_mutation_index = randint(1, self.chromosome_length)
+            second_mutation_index = randint(1, self.chromosome_length)
             while first_mutation_index == second_mutation_index:
-                second_mutation_index = randint(first_mutation_index-10, first_mutation_index+10)
+                second_mutation_index = randint(1, self.chromosome_length)
 
             new_mutated_chromosome = self.population[i]
 
@@ -217,7 +217,6 @@ class travelling_salesman_problem_algorithm:
         # second get connections
         x_connection = []
         y_connection = []
-        min_index = np.argmin(self.population_evaluation)
         for i in range(self.chromosome_length):
             x_connection.append(self.node_list[self.best_chromosome[i]][1][0])
             y_connection.append(self.node_list[self.best_chromosome[i]][1][1])
