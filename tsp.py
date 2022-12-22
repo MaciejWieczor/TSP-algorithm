@@ -58,7 +58,7 @@ class travelling_salesman_problem_algorithm:
         np.savetxt("best_chromosome.txt", self.best_chromosome)
 
     def load_best_chromosome(self):
-        self.best_chromosome = np.loadtxt("best_chromosome.txt")
+        self.best_chromosome = np.loadtxt("best_chromosome.txt").astype(int)
 
     def return_distance_matrix(self, x, y):
         # print the distance between nodes 4 and 2:
@@ -251,4 +251,5 @@ for k in range(number_of_iterations):
         TSP_instance.best_score = min(TSP_instance.population_evaluation)
         TSP_instance.save_best_chromosome()
 
+# TSP_instance.load_best_chromosome()
 TSP_instance.visualize_connections()
