@@ -58,7 +58,7 @@ class travelling_salesman_problem_algorithm:
         self.best_chromosome = np.loadtxt("best_chromosome.txt").astype(int)
 
     def load_best_chromosome_from_cmd(self, i):
-        self.best_chromosome = np.loadtxt(sys.argv[i]).astype(int)
+        self.best_chromosome = np.loadtxt(i).astype(int)
 
     def visualize_connections(self, subplot_id, plot_text):
         # first translate points into two arrays
@@ -85,11 +85,11 @@ TSP_instance = travelling_salesman_problem_algorithm(population_size=5)
 TSP_instance.best_chromosome = TSP_instance.population[np.argmin(min(TSP_instance.population_evaluation))]
 TSP_instance.best_score = min(TSP_instance.population_evaluation)
 TSP_instance.visualize_connections((1,2), "Randomly initialized")
-TSP_instance.load_best_chromosome_from_cmd(2)
+TSP_instance.load_best_chromosome_from_cmd("results/xqf131_50k_5p_792.txt")
 TSP_instance.visualize_connections((3,4), "5 chromosome population")
-TSP_instance.load_best_chromosome_from_cmd(3)
+TSP_instance.load_best_chromosome_from_cmd("results/xqf131_50k_20p_679.txt")
 TSP_instance.visualize_connections((5,6), "20 chromosome population")
-TSP_instance.load_best_chromosome_from_cmd(4)
+TSP_instance.load_best_chromosome_from_cmd("results/xqf131_50k_50p_649.txt")
 TSP_instance.visualize_connections((7,8), "50 chromosome population")
 TSP_instance.ax.get_xaxis().set_visible(False)
 TSP_instance.ax.get_yaxis().set_visible(False)
