@@ -60,6 +60,9 @@ class travelling_salesman_problem_algorithm:
     def load_best_chromosome(self):
         self.best_chromosome = np.loadtxt("best_chromosome.txt").astype(int)
 
+    def load_best_chromosome_from_cmd(self):
+        self.best_chromosome = np.loadtxt(sys.argv[2]).astype(int)
+
     def return_distance_matrix(self, x, y):
         # print the distance between nodes 4 and 2:
         return(self.distance_matrix[x, y])
@@ -228,28 +231,28 @@ class travelling_salesman_problem_algorithm:
             y_connection.append(self.node_list[self.best_chromosome[i]][1][1])
         self.ax.scatter(x_point,y_point)
         self.ax.plot(x_connection,y_connection)
-        plt.show()
 
 # testing
 # create class instance
 TSP_instance = travelling_salesman_problem_algorithm(population_size=5)
 TSP_instance.best_chromosome = TSP_instance.population[np.argmin(min(TSP_instance.population_evaluation))]
 TSP_instance.best_score = min(TSP_instance.population_evaluation)
-
-for k in range(number_of_iterations):
-    # get chromosome scores
-    TSP_instance.evaluate_chromosomes()
-
-    # get new population based on probability
-    TSP_instance.update_population()
-
-    if(k % 1000 == 0):
-        print(f"ITERATION {k}")
-        print(min(TSP_instance.population_evaluation))
-    if(min(TSP_instance.population_evaluation) < TSP_instance.best_score):
-        TSP_instance.best_chromosome = TSP_instance.population[np.argmin(min(TSP_instance.population_evaluation))]
-        TSP_instance.best_score = min(TSP_instance.population_evaluation)
-        TSP_instance.save_best_chromosome()
-
-# TSP_instance.load_best_chromosome()
+#
+# for k in range(number_of_iterations):
+#     # get chromosome scores
+#     TSP_instance.evaluate_chromosomes()
+#
+#     # get new population based on probability
+#     TSP_instance.update_population()
+#
+#     if(k % 1000 == 0):
+#         print(f"ITERATION {k}")
+#         print(min(TSP_instance.population_evaluation))
+#     if(min(TSP_instance.population_evaluation) < TSP_instance.best_score):
+#         TSP_instance.best_chromosome = TSP_instance.population[np.argmin(min(TSP_instance.population_evaluation))]
+#         TSP_instance.best_score = min(TSP_instance.population_evaluation)
+#         TSP_instance.save_best_chromosome()
+#
+TSP_instance.load_best_chromosome_from_cmd()
 TSP_instance.visualize_connections()
+plt.show()
