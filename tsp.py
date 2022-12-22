@@ -1,11 +1,12 @@
 from numpy.random import randint
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 import tsplib95
 import networkx
 import sys
 
-number_of_iterations = 1000
+number_of_iterations = 3000
 
 # takes name of tsp file from the first command line argument
 class travelling_salesman_problem_algorithm:
@@ -43,8 +44,10 @@ class travelling_salesman_problem_algorithm:
     def initialize_random_chromosome(self):
         # randomize array of cities indexes
         # array = randint(1, self.chromosome_length, self.chromosome_length-1)
-        array = np.random.choice(range(1, self.chromosome_length),\
-                                 self.chromosome_length-1, replace=False)
+        # array = np.random.choice(range(1, self.chromosome_length),\
+                                 # self.chromosome_length-1, replace=False)
+        array = np.array(list(range(1, self.chromosome_length)))
+        random.shuffle(array)
         array = np.insert(array, 0, 0)
         return(array)
 
@@ -65,11 +68,96 @@ class travelling_salesman_problem_algorithm:
     def crossing_function(self, i):
         # implement OX crossover here
         # find second parent
+        second_parent_index = randint(0, self.population_size)
+        while second_parent_index == i:
+            second_parent_index = randint(0, self.population_size)
+
         # create children
+        first_crossover_point = randint(1, self.chromosome_length/2)
+        second_crossover_point = randint(self.chromosome_length/2, self.chromosome_length)
+
+        new_child_one = [0] * self.chromosome_length
+        new_child_two = [0] * self.chromosome_length
+
+        new_child_one[first_crossover_point:second_crossover_point] = \
+            self.population[i][first_crossover_point:second_crossover_point]
+        new_child_two[first_crossover_point:second_crossover_point] = \
+            self.population[second_parent_index][first_crossover_point:second_crossover_point]
+
+        # print("CHROMOSOME")
+        # print("POPULATION @ i")
+        # print(self.population[i])
+        # print("SECOND PARENT POPULATION")
+        # print(self.population[second_parent_index])
+        # print("NEW CHILD INIT @ i")
+        # print(new_child_one)
+        # print(len(new_child_one))
+
+        new_child_one_tmptmp = list(self.population[i][second_crossover_point:]) + \
+                               list(self.population[i][1:first_crossover_point]) + \
+                               list(self.population[i][first_crossover_point:second_crossover_point])
+        new_child_two_tmptmp = list(self.population[second_parent_index][second_crossover_point:]) + \
+                               list(self.population[second_parent_index][1:first_crossover_point]) + \
+                               list(self.population[second_parent_index][first_crossover_point:second_crossover_point])
+
+        new_child_one_tmp = [i for i in new_child_one_tmptmp if i not in new_child_two]
+        new_child_two_tmp = [i for i in new_child_two_tmptmp if i not in new_child_one]
+
+        # print("NEW CHILD MERGED CUT @ i")
+        # print(new_child_two_tmptmp)
+        # print(len(new_child_two_tmptmp))
+        # print("NEW CHILD MERGED CUT REMOVED COPIES @ i")
+        # print(new_child_two_tmp)
+        # print(len(new_child_two_tmp))
+        # print(f"LEN TMP {len(new_child_one_tmp)}, LEN MIDDLE PART {second_crossover_point - first_crossover_point}")
+        # print(f"LEN SUM {len(new_child_one_tmp) + second_crossover_point - first_crossover_point}")
+
+        new_child_one = \
+            np.array([0] + \
+            list(new_child_two_tmp[first_crossover_point:]) + \
+            list(self.population[i][first_crossover_point:second_crossover_point]) + \
+            list(new_child_two_tmp[:first_crossover_point]))
+
+
+        # print("NEW CHILD AFTER CROSSING @ i")
+        # print(new_child_one)
+        # print(len(new_child_one))
+
+        new_child_two = \
+            np.array([0] + \
+            list(new_child_one_tmp[first_crossover_point:]) + \
+            list(self.population[second_parent_index][first_crossover_point:second_crossover_point]) + \
+            list(new_child_one_tmp[:first_crossover_point]))
+
         # evaluate children scores 
-        # if better than their parents replace the parents - return 0
-        # else - return 1
-        pass
+
+        child_one_evaluation = self.evaluate_chromosome(new_child_one)
+        child_two_evaluation = self.evaluate_chromosome(new_child_two)
+
+        # if better than their parents replace the parents
+        # return 0 if both parents are replaced
+        # return 1 if first parent is replaced
+        # return 2 if second parent is replaced
+        # return 3 if no parents are replaced
+
+        return_value = 3
+
+        if child_one_evaluation < self.population_evaluation[i]:
+            self.population[i] = new_child_one
+            self.population_evaluation[i] = child_one_evaluation
+            return_value = 1
+
+
+        if child_two_evaluation < self.population_evaluation[second_parent_index]:
+            self.population[second_parent_index] = new_child_two
+            self.population_evaluation[second_parent_index] = child_two_evaluation
+            if(return_value == 3):
+                return_value = 2
+            else:
+                return_value = 0
+
+        # print("------------------------------------------------------------------------")
+        return return_value
 
     def mutating_function(self, i):
         pass
@@ -110,15 +198,16 @@ class travelling_salesman_problem_algorithm:
 
 # testing
 # create class instance
-TSP_instance = travelling_salesman_problem_algorithm(population_size=20)
+TSP_instance = travelling_salesman_problem_algorithm(population_size=5)
 
 for k in range(number_of_iterations):
+    print(f"ITERATION {k}")
     # get chromosome scores
     TSP_instance.evaluate_chromosomes()
 
     # get new population based on probability
     TSP_instance.update_population()
 
-    print(TSP_instance.population_evaluation)
+    print(max(TSP_instance.population_evaluation))
 
 TSP_instance.visualize_connections()
