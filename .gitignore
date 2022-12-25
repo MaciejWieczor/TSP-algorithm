@@ -3,4 +3,5 @@
 **/*.log
 **/*.synctex.gz
 **/*.fls
+**/*.out
 best_chromosome.txt
