@@ -2,7 +2,9 @@
 \usepackage[main=polish,english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
+\usepackage{xcolor}
 
 \title{Zastosowanie programowania ewolucyjnego w celu rozwiązania problemu
     komiwojażera}
@@ -17,12 +19,13 @@
 
 \section{Opis problemu}
 
-Problem komiwojażera jest problemem minimalizacji, polegającym na odnalezieniu
-minimalnego cyklu Hamiltona w pełnym grafie ważonym. Cykl Hamiltona to taki cykl
-w grafie, w którym każdy wierzchołek grafu jest odwiedzony dokładnie raz. Czyli
-rozwiązaniem problemu komiwojażera jest cykl o najmniejszej sumie wag krawędzi
-grafu. Liczba różnych cyklów Hamiltona $H$ dla pełnego grafu nieskierowanego o
-$n$ wierzchołkach jest wyrażana równaniem \cref{equ:n_cycles}.
+Problem komiwojażera (ang. \textit{Traveling salesman problem}) jest problemem
+minimalizacji, polegającym na odnalezieniu minimalnego cyklu Hamiltona w pełnym
+grafie ważonym. Cykl Hamiltona to taki cykl w grafie, w którym każdy wierzchołek
+grafu jest odwiedzony dokładnie raz. Czyli rozwiązaniem problemu komiwojażera
+jest cykl o najmniejszej sumie wag krawędzi grafu. Liczba różnych cyklów
+Hamiltona $H$ dla pełnego grafu nieskierowanego o $n$ wierzchołkach jest
+wyrażana równaniem \cref{equ:n_cycles}.
 \begin{equation}
     H = \frac{\left(n - 1\right)!}{2}
     \label{equ:n_cycles}
@@ -32,7 +35,15 @@ fizycznie niemożliwe dla większych grafów. Przykładowo stosunkowo mały graf
 stu wierzchołkach, daje w przybliżeniu $4,7 \times  10^{155}$ rozwiązań. Dla
 przybliżenia zakładając, że sprawdzenie jednej ścieżki zajmuje $1 \, \mu s$,
 przeanalizowanie wszystkich ścieżek zajęłoby $1,48 \times  10^{142} \, lat$.
-Z tego powodu ważne jest zastosowanie optymalnych algorytmów minimalizacyjnych.
+Z tego powodu ważne jest zastosowanie bardziej skomplikowanych algorytmów
+minimalizacyjnych, takich jak właśnie programowanie genetyczne. Dobrze
+skonstruowany algorytm powinien być w stanie znaleźć minimum globalne dla
+większości przypadków lub przynajmniej optymalne rozwiązanie.
+
+Napisany algorytm będzie testowany na danych z
+{\color{blue} \href{https://www.math.uwaterloo.ca/tsp/vlsi/index.html}
+{www.math.uwaterloo.ca}} w celu weryfikacji jego działania.
+
 
 \section{Implementacja}
 
