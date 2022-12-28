@@ -5,6 +5,11 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
 \usepackage{xcolor}
+\usepackage{enumitem}
+
+\setlist[itemize]{noitemsep}
+
+% the document is below
 
 \title{Zastosowanie programowania ewolucyjnego w celu rozwiązania problemu
     komiwojażera}
@@ -17,7 +22,7 @@
 
 \maketitle
 
-\section{Opis problemu}
+\section{Wstęp}
 
 Problem komiwojażera (ang. \textit{Traveling salesman problem}) jest problemem
 minimalizacji, polegającym na odnalezieniu minimalnego cyklu Hamiltona w pełnym
@@ -44,8 +49,73 @@ Napisany algorytm będzie testowany na danych z
 {\color{blue} \href{https://www.math.uwaterloo.ca/tsp/vlsi/index.html}
 {www.math.uwaterloo.ca}} w celu weryfikacji jego działania.
 
-
 \section{Implementacja}
+
+Jak zostało wspomniane na wstępie, rozwiązaniem problemu komiwojażera jest
+najkrótszy cykl Hamiltona dla danego pełnego, ważonego i nieskierowanego grafu.
+Z tych informacji wynikają szczegóły implementacji takie jak funkcja
+przystosowania, reprezentacja osobników oraz ograniczenia co do sposobu mutacji,
+oraz krzyżowania osobników.
+
+Ponieważ szukany jest cykl Hamiltona, w rozwiązaniu
+każdy wierzchołek grafu pojawi się tylko raz, to znaczy, że mając graf $G$ o $N$
+wierzchołkach:
+\begin{equation}
+    V\left(G\right) = \left\{ v_1 \, v_2 \, \cdots v_N \right\},
+\end{equation}
+rozwiązaniem będzie pewna permutacja zbioru $V\left(G\right)$. Z uwagi na to,
+najłatwiej jest wykorzystać \textbf{kodowanie całkowitoliczbowe}. Z tym
+kodowaniem każdy wierzchołek dostaje swój indeks, a następnie każdy osobnik
+składa się z pewnej permutacji wierzchołków grafu, reprezentując pojedynczy cykl
+Hamiltona.
+
+Mając zdefiniowany sposób zapisu osobników, można w oparciu o to zdefiniować
+funkcję przystosowania $f \left( x \right)$ dla osobnika $x$. Najpierw jednak
+należy zdefiniować funkcję kosztu $u \left( x \right)$. Ponieważ pojedynczy
+osobnik składa się z kolejnych indeksów wierzchołków, funkcją kosztu jest
+suma wag krawędzi pomiędzy kolejnymi wierzchołkami, oraz dodatkowo pomiędzy
+pierwszym a ostatnim wierzchołkiem w osobniku (szukany jest cykl grafu).
+Następnie funkcja przystosowania $f \left( x \right)$ jest następująca:
+\begin{equation}
+    f \left( x \right) = C_{max} - u \left( x \right),
+\end{equation}
+gdzie:
+\begin{itemize}
+    \item[] $f \left( x \right)$ - funkcja przystosowania,
+    \item[] $u \left( x \right)$ - funkcja kosztu,
+    \item[] $C_{max}$ - parametr nie mniejszy niż maksymalna wartość
+            $u \left( x \right)$ dla danej aktualnej populacji,
+    \item[] $x$ - osobnik.
+\end{itemize}
+
+Z uwagi na naturę rozwiązania, metody krzyżowania osobników są ograniczone,
+ponieważ allele w nowopowstałym osobniku nie mogą się powtarzać. Dlatego
+przykładowo krzyżowanie arytmetycznie się nie nadaje. Możliwe sposoby
+krzyżowania to:
+\begin{itemize}
+    \item PMX,
+    \item OX,
+    \item CX.
+\end{itemize}
+W projekcie użyto krzyżowania OX...
+
+Podobnie jak w przypadku krzyżowania, osobniki po mutacji dalej muszą tworzyć
+poprawny ciąg Hamiltona. Z tego powodu mutacje ograniczają się do podmian
+elementów w strukturze osobnika, bez zmian ich wartości. Dopuszczalne sposoby
+mutacji to:
+\begin{itemize}
+    \item inwersja (ang. inversion),
+    \item wstawianie (ang. insertion),
+    \item przenoszenie (ang. displacement),
+    \item wzajemna wymiana (ang. reciprocal exchange).
+\end{itemize}
+W projekcie użyto ...
+
+Tworzenie nowej populacji tutaj, tj:
+\begin{itemize}
+    \item jak są dobierani rodzice i krzyżowani,
+    \item jak są wybierane nowe osobniki z otrzymanych pul osobników.
+\end{itemize}
 
 \section{Wyniki pracy}
 
