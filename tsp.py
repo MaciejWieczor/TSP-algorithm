@@ -165,6 +165,25 @@ class travelling_salesman_problem_algorithm:
         # print("------------------------------------------------------------------------")
         return return_value
 
+    def invert_chromosome_portion(self, i):
+        test = randint(0, 1000)
+        if test < 100:
+            # swap two elements of the "i" chromosome
+            first_mutation_index = randint(1, self.chromosome_length-5)
+            second_mutation_index = randint(first_mutation_index+1, self.chromosome_length)
+            while first_mutation_index == second_mutation_index:
+                second_mutation_index = randint(first_mutation_index+1, self.chromosome_length)
+
+            new_mutated_chromosome = self.population[i]
+            new_mutated_chromosome[first_mutation_index:second_mutation_index] = \
+                new_mutated_chromosome[first_mutation_index:second_mutation_index][::-1]
+
+            # test evaluation 
+            mutated_evaluation = self.evaluate_chromosome(new_mutated_chromosome)
+            # if mutated_evaluation < self.population_evaluation[i]:
+            self.population[i] = new_mutated_chromosome 
+            self.population_evaluation[i] = mutated_evaluation
+
     def mutating_function(self, i):
 
         test = randint(0, 1000)
@@ -193,9 +212,10 @@ class travelling_salesman_problem_algorithm:
             self.population[i] = new_mutated_chromosome 
             self.population_evaluation[i] = mutated_evaluation
 
-    def update_population(self):
+    def update_population(self, iteration):
         # loop through all chromosomes 
         best_score = max(self.population_evaluation)
+
         for i in range(0, self.population_size):
             # do probability test based on current outcome against best evaluation 
             # (best should have max probability) 
@@ -213,7 +233,9 @@ class travelling_salesman_problem_algorithm:
 
                 do_mutation = self.crossing_function(i, second_parent_index)
                 # mutate member if he didn't do crossing
-                if do_mutation == 3:
+                if do_mutation == 3 and iteration < (0.8 * number_of_iterations):
+                    self.invert_chromosome_portion(i)
+                elif do_mutation == 3:
                     self.mutating_function(i)
 
     def visualize_connections(self):
@@ -243,7 +265,7 @@ for k in range(number_of_iterations):
     TSP_instance.evaluate_chromosomes()
 
     # get new population based on probability
-    TSP_instance.update_population()
+    TSP_instance.update_population(k)
 
     if(k % 1000 == 0):
         print(f"ITERATION {k}")
