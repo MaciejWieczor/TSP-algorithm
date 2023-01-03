@@ -3,20 +3,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
   
-x5 = np.loadtxt("results_eval/xqf131_100k_5p_758_x.txt").astype(int)
-y5 = np.loadtxt("results_eval/xqf131_100k_5p_758_y.txt").astype(int)
+x5 = np.loadtxt("results_eval_v2/xqf131_100k_50p_615_x.txt").astype(int)
+y5 = np.loadtxt("results_eval_v2/xqf131_100k_50p_615_y.txt").astype(int)
 
-plt.plot(x5, y5, label = "5 chromosomes")
+plt.plot(x5, y5, label = "50 chromosomes")
 
-x20 = np.loadtxt("results_eval/xqf131_100k_20p_670_x.txt").astype(int)
-y20 = np.loadtxt("results_eval/xqf131_100k_20p_670_y.txt").astype(int)
+x20 = np.loadtxt("results_eval_v2/xqf131_100k_75p_588_x.txt").astype(int)
+y20 = np.loadtxt("results_eval_v2/xqf131_100k_75p_588_y.txt").astype(int)
 
-plt.plot(x20, y20, label = "20 chromosomes")
+plt.plot(x20, y20, label = "75 chromosomes")
 
-x50 = np.loadtxt("results_eval/xqf131_100k_50p_606_x.txt").astype(int)
-y50 = np.loadtxt("results_eval/xqf131_100k_50p_606_y.txt").astype(int)
+x50 = np.loadtxt("results_eval_v2/xqf131_100k_100p_614_x.txt").astype(int)
+y50 = np.loadtxt("results_eval_v2/xqf131_100k_100p_614_y.txt").astype(int)
 
-plt.plot(x50, y50, label = "50 chromosomes")
+plt.plot(x50, y50, label = "100 chromosomes")
   
 # naming the x axis
 plt.xlabel("Iterations")
