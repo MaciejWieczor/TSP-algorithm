@@ -7,12 +7,23 @@
 \usepackage{enumitem}
 \usepackage[a4paper,inner=3.5cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{newtxtext, newtxmath}
+\usepackage{graphicx}
+\usepackage[section]{placeins}
 \usepackage{cleveref}
 
 
 \setlist[itemize]{noitemsep}
 \linespread{1.3} %interlinia 1.5
 \setlength{\parindent}{1.25cm}
+
+\crefname{figure}{}{}
+\Crefname{figure}{}{}
+\crefname{table}{}{}
+\Crefname{table}{}{}
+\crefname{section}{}{}
+\Crefname{section}{}{}
+\crefname{chapter}{}{}
+\Crefname{chapter}{}{}
 
 % the document is below
 
@@ -146,4 +157,125 @@ zależności od tego, który osobnik jest lepszy.
 
 \section{Wyniki pracy}
 
+Jak wspomniano na wstępie, algorytm został przetestowany na danych z
+{\color{blue} \href{https://www.math.uwaterloo.ca/tsp/vlsi/index.html}
+{www.math.uwaterloo.ca}} w celu weryfikacji jego działania. Pierwszym testowym
+grafem jest
+{\color{blue} \href{https://www.math.uwaterloo.ca/tsp/vlsi/xqf131.points.html}
+{xqf131}}, którego wierzchołki są przedstawione na rysunku \cref{fig:xqf131}.
+Natomiast drugim grafem testowym jest
+{\color{blue} \href{https://www.math.uwaterloo.ca/tsp/vlsi/xqg237.points.html}
+{xqg237}}, którego wierzchołki są przedstawione na rysunku \cref{fig:xqg237}.
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.7]{img/xqf131.png}
+    \caption{Wierzchołki grafu xqf131}
+    \label{fig:xqf131}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.7]{img/xqg237.png}
+    \caption{Wierzchołki grafu xqg237}
+    \label{fig:xqg237}
+\end{figure}
+
+Początkowo algorytm do mutacji osobników wykorzystywał tylko wstawianie, bez
+inwersji oraz dla stosunkowo małej liczby osobników w populacji, wyniki
+przedstawiono na rysunku \cref{fig:131_no_inverse}.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.9]{img/131_no_inverse.png}
+    \caption{Przebieg pierwszej wersji algorytmu dla grafu xqf131}
+    \label{fig:131_no_inverse}
+\end{figure}
+Jak widać, algorytm bardzo szybko zbiega się do jakiegoś rozwiązania. Również
+widać, że zwiększenie liczby osobników pozwala na odnalezienie lepszego
+rozwiązania, dzięki rozważaniu większej ilości potencjalnych ścieżek.
+Następnie ten sam algorytm został sprawdzony na większym grafie xqg237. Wyniki
+są przedstawione na rysunku 
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.9]{img/237_no_inverse.png}
+    \caption{Przebieg pierwszej wersji algorytmu dla grafu xqg237}
+    \label{fig:237_no_inverse}
+\end{figure}
+Jest ta sama sytuacja jak w przypadku mniejszego grafu, rozwiązanie szybko się
+zbiega, a większa liczba osobników pomaga znaleźć lepsze rozwiązanie.
+Znalezione rozwiązania przedstawiono na rysunku \cref{fig:v1_solutions}
+\begin{figure}
+    \centerline{\includegraphics[scale=0.5]{../131_obrazy.png}}
+    \caption{Znalezione rozwiązania grafu xqf131 dla poszczególnych populacji
+    bez inwersji}
+    \label{fig:v1_solutions}
+\end{figure}
+\begin{figure}
+    \centerline{\includegraphics[scale=0.5]{../237_obrazy.png}}
+    \caption{Znalezione rozwiązania grafu xqg237 dla poszczególnych populacji
+    bez inwersji}
+    \label{fig:v1_solutions_237}
+\end{figure}
+
+W kolejnej wersji programu, do mutacji została dodana inwersja, z myślą o tym,
+aby ograniczyć wpadanie do minimum lokalnego. Wpływ tej modyfikacji jest
+przedstawiony na rysunku \cref{fig:comparison}.
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.9]{img/comparison_50p_131.png}
+    \caption{Porównanie dwóch wersji algorytmu dla grafu xqf131 i 50 osobników}
+    \label{fig:comparison}
+\end{figure}
+Jak można zauważyć, dodanie inwersji faktycznie spowalnia zbieganie się
+algorytmu, jednak ostatecznie rozwiązanie jest podobne.
+
+Poza inwersją zostały użyte większe populacje. Przekłada się to na dłuższy czas
+szukania rozwiązania, ale w zamian jest odszukane lepsze rozwiązanie. Na
+rysunku \cref{fig:131_inverse} jest przedstawiony przebieg algorytmu po
+modyfikacji dla grafu xqf131.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.9]{img/131_inverse.png}
+    \caption{Przebieg drugiej wersji algorytmu dla grafu xqf131}
+    \label{fig:131_inverse}
+\end{figure}
+Algorytm dość szybko zbiega się do rozwiązania, pomimo dodania nowej mutacji,
+ale jest to spowodowane większą ilością osobników. Samo rozwiązanie jest też
+lepsze w porównaniu do poprzedniej wersji programu, bez inwersji.
+Na rysunku \cref{fig:v2_solutions} przedstawiono znalezione ścieżki dla po
+dodaniu inwersji do mutacji. Wyniki dla obu grafów są przedstawione w tebeli
+\cref{tab1} oraz \cref{tab2}.
+\begin{figure}
+    \centerline{\includegraphics[scale=0.5]{../131_obrazy_inverse.png}}
+    \caption{Znalezione rozwiązanie grafu xqf131 dla poszczególnych populacji po
+    dodaniu inwersji}
+    \label{fig:v2_solutions}
+\end{figure}
+\begin{table}[]
+    \centering
+    \begin{tabular}{|lll|}
+    \hline
+    \multicolumn{3}{|c|}{xqf131}                                            \\ \hline
+    \multicolumn{1}{|l|}{populacja} & \multicolumn{1}{l|}{inwersja} & wynik \\ \hline
+    \multicolumn{1}{|l|}{5}         & \multicolumn{1}{l|}{nie}      & 758   \\ \hline
+    \multicolumn{1}{|l|}{20}        & \multicolumn{1}{l|}{nie}      & 670   \\ \hline
+    \multicolumn{1}{|l|}{50}        & \multicolumn{1}{l|}{nie}      & 606   \\ \hline
+    \multicolumn{1}{|l|}{50}        & \multicolumn{1}{l|}{tak}      & 615   \\ \hline
+    \multicolumn{1}{|l|}{75}        & \multicolumn{1}{l|}{tak}      & 588   \\ \hline
+    \multicolumn{1}{|l|}{100}       & \multicolumn{1}{l|}{tak}      & 614   \\ \hline
+    \end{tabular}
+    \caption{Otrzymane wyniki dla grafu xqf131 po $10^{6}$ iteracjach}
+    \label{tab1}
+\end{table}
+\begin{table}[]
+    \centering
+    \begin{tabular}{|lll|}
+    \hline
+    \multicolumn{3}{|c|}{xqg237}                                            \\ \hline
+    \multicolumn{1}{|l|}{populacja} & \multicolumn{1}{l|}{inwersja} & wynik \\ \hline
+    \multicolumn{1}{|l|}{5}         & \multicolumn{1}{l|}{nie}      & 1744  \\ \hline
+    \multicolumn{1}{|l|}{20}        & \multicolumn{1}{l|}{nie}      & 1428  \\ \hline
+    \multicolumn{1}{|l|}{50}        & \multicolumn{1}{l|}{nie}      & 1344  \\ \hline
+    \end{tabular}
+    \caption{Otrzymane wyniki dla grafu xqg237 po $10^{6}$ iteracjach}
+    \label{tab2}
+\end{table}
 \end{document}
