@@ -124,13 +124,20 @@ stworzenie nowych tras w osobnikach, tak zmiany są małe i algorytm przy tylko
 takim rodzaju mutacji, szybko się zbiega do minimum lokalnego. Dlatego, aby
 troch zwiększyć szansę na znalezienie innego, lepszego minimum, została dodana
 inwersja. Ponieważ zmiany przy inwersji są bardziej drastyczne, jest większa
-szansa, że populacja nie utknie od razu w minimum lokalnym.
+szansa, że populacja nie utknie od razu w minimum lokalnym. To czy zostanie
+wykonana inwersja czy wstawianie też zależy od obecnej iteracji. Im wyższa
+iteracja, tym większa szansa, że zostanie wykonane wstawianie zamiast inwersji.
 
-Tworzenie nowej populacji tutaj, tj:
-\begin{itemize}
-    \item jak są dobierani rodzice i krzyżowani,
-    \item jak są wybierane nowe osobniki z otrzymanych pul osobników.
-\end{itemize}
+Przy tworzeniu nowych osobników również trzeba uważać, aby nie tworzyć elity.
+Zostawianie i krzyżowanie tylko najlepszych osobników, prowadzi do
+przedwczesnego zbiegania się algorytmu do nieoptymalnego rozwiązania. Dlatego
+osobniki są niszowane w ten sposób, że osobniki z gorszym przystosowaniu mają
+większą szansę na trafienie do puli rodzicielskiej. W odwrotnej konfiguracji,
+gdzie lepsze osobniki miały większą szansę na trafienie do puli rodzicielskiej,
+algorytm przedwcześnie się zbiegał do suboptymlanego rozwiązania. Następnie po
+przeprowadzeniu krzyżowania i wyznaczeniu nowych osobników, są one poddawane
+mutacji. Po krzyżowaniu oraz mutacji są pozostawiani rodzice lub potomkowie, w
+zależności od tego, który osobnik jest lepszy.
 
 \section{Wyniki pracy}
 
