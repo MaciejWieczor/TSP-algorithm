@@ -64,10 +64,9 @@ wierzchołkach:
     V\left(G\right) = \left\{ v_1 \, v_2 \, \cdots v_N \right\},
 \end{equation}
 rozwiązaniem będzie pewna permutacja zbioru $V\left(G\right)$. Z uwagi na to,
-najłatwiej jest wykorzystać \textbf{kodowanie całkowitoliczbowe}. Z tym
-kodowaniem każdy wierzchołek dostaje swój indeks, a następnie każdy osobnik
-składa się z pewnej permutacji wierzchołków grafu, reprezentując pojedynczy cykl
-Hamiltona.
+najłatwiej jest wykorzystać kodowanie całkowitoliczbowe. Z tym kodowaniem każdy
+wierzchołek dostaje swój indeks, a następnie każdy osobnik składa się z pewnej
+permutacji wierzchołków grafu, reprezentując pojedynczy cykl Hamiltona.
 
 Mając zdefiniowany sposób zapisu osobników, można w oparciu o to zdefiniować
 funkcję przystosowania $f \left( x \right)$ dla osobnika $x$. Najpierw jednak
@@ -97,7 +96,14 @@ krzyżowania to:
     \item OX,
     \item CX.
 \end{itemize}
-W projekcie użyto krzyżowania OX...
+W projekcie użyto krzyżowania OX, ponieważ ta metoda krzyżowania najbardziej
+zachowuje kolejność alleli w osobniku. Zamysł jest taki, aby osobniki wymieniały
+się krótkimi trasami, zachowując ich kolejność. Dany osobnik na początku
+działania algorytmu będzie miał zoptymalizowany tylko fragment trasy. Krzyżując
+dwa osobniki, jest spora szansa, że ten fragment się zachowa i trafi do
+kolejnego osobnika. Za mieszanie kolejności raczej powinny być odpowiedzialne
+mutacje osobników. Metody krzyżowania PMX oraz OX za bardzo zmieniają szyk
+alleli, przez co nie zostały wykorzystane.
 
 Podobnie jak w przypadku krzyżowania, osobniki po mutacji dalej muszą tworzyć
 poprawny ciąg Hamiltona. Z tego powodu mutacje ograniczają się do podmian
@@ -109,7 +115,16 @@ mutacji to:
     \item przenoszenie (ang. displacement),
     \item wzajemna wymiana (ang. reciprocal exchange).
 \end{itemize}
-W projekcie użyto ...
+W projekcie użyto inwersji oraz wstawiania. Przy mutacji, szczególnie w
+początkowej fazie działania algorytmu, ważne jest, aby mutacje miały charakter
+globalny. Inwersja polega na wylosowaniu podciągu w osobniku i odwrócenie w nim
+kolejności alleli, natomiast wstawianie polega na wylosowaniu pojedynczego
+allela, i wstawienie go w innym, losowo wybranym miejscu. Wstawianie pozwala na
+stworzenie nowych tras w osobnikach, tak zmiany są małe i algorytm przy tylko
+takim rodzaju mutacji, szybko się zbiega do minimum lokalnego. Dlatego, aby
+troch zwiększyć szansę na znalezienie innego, lepszego minimum, została dodana
+inwersja. Ponieważ zmiany przy inwersji są bardziej drastyczne, jest większa
+szansa, że populacja nie utknie od razu w minimum lokalnym.
 
 Tworzenie nowej populacji tutaj, tj:
 \begin{itemize}
